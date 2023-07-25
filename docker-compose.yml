@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: doublevp
+      POSTGRES_PASSWORD: adm123
+      POSTGRES_DB: gh_users
+
+  backend:
+    build:
+      context: ./doublevp-back
+      dockerfile: dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      DB_USER: doublevp
+      DB_PASSWORD: adm123
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: gh_users
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./doublevp-front
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
